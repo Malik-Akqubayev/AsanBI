@@ -113,6 +113,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const amount = parseFloat(formData.get('amount'));
         const date = formData.get('date');
         const dateLabel = new Date(date).toLocaleDateString();
+        const description = formData.get('description');
+
+        const dataEntry = {
+            entryType: entryType,
+            date: date,
+            amount: amount,
+            description: description
+        };
+
+        // Save data to localStorage
+        let entries = JSON.parse(localStorage.getItem('entries')) || [];
+        entries.push(dataEntry);
+        localStorage.setItem('entries', JSON.stringify(entries));
 
         if (entryType === 'sale') {
             if (!labels.includes(dateLabel)) {
@@ -169,9 +182,11 @@ document.addEventListener('DOMContentLoaded', () => {
         dailyProfitList.innerHTML = labels.map((label, index) => 
             `<li>${label}: Sales: $${dailySales[index].toFixed(2)}, Purchases: $${dailyPurchases[index].toFixed(2)}, Profit: $${dailyProfit[index].toFixed(2)}</li>`
         ).join('');
+        
 
         // Update total profit display
         totalProfitElement.textContent = `Total Profit: $${totalProfit.toFixed(2)}`;
+
 
         // Optionally, clear the form fields
         form.reset();
