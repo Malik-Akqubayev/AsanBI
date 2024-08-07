@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('data-form');
     const totalProfitElement = document.getElementById('totalProfit');
     const dailyProfitList = document.getElementById('dailyProfitList');
+    const dateInput = document.getElementById('date'); // Add this line
 
     // Initialize chart data arrays
     let salesData = [];
@@ -101,13 +102,16 @@ document.addEventListener('DOMContentLoaded', () => {
         descriptionRow.classList.toggle('hidden', !showFields);
     });
 
+    // Initialize date input to today's date
+
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.value = today;
     // Initial call to set visibility based on the default selected option
     entryTypeSelect.dispatchEvent(new Event('change'));
 
     // Handle form submission
     form.addEventListener('submit', (event) => {
         event.preventDefault();
-
         const formData = new FormData(form);
         const entryType = formData.get('entry-type');
         const amount = parseFloat(formData.get('amount'));
@@ -182,14 +186,15 @@ document.addEventListener('DOMContentLoaded', () => {
         dailyProfitList.innerHTML = labels.map((label, index) => 
             `<li>${label}: Sales: $${dailySales[index].toFixed(2)}, Purchases: $${dailyPurchases[index].toFixed(2)}, Profit: $${dailyProfit[index].toFixed(2)}</li>`
         ).join('');
-        
 
         // Update total profit display
         totalProfitElement.textContent = `Total Profit: $${totalProfit.toFixed(2)}`;
 
-
         // Optionally, clear the form fields
         form.reset();
         entryTypeSelect.dispatchEvent(new Event('change'));  // Re-trigger change event to hide fields
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.value = today;
     });
+
 });
